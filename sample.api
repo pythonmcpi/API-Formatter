@@ -1,7 +1,7 @@
 ## Title
 ### Subtitle
 #### Heading 3
-GET /route -> 200 OK {key[string], another_key(status_code), status_msg(status_message)} | 404 Not Found
+GET /route -> 200 OK json[key[string], another_key(status_code), status_msg(status_message)] | 404 Not Found
 POST /another/route json -> 201 CREATED json[path[string], timestamp[int]<extra note here>] | 400 Bad Request
 DELETE /wildcard/route/* -> 200 OK | 403 Forbidden
 PATCH /yet/another/route ?url=parameters&go=here | PUT /a/route -> 200 OK json
