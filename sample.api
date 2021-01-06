@@ -6,4 +6,4 @@
 {Delete a resource} DELETE /wildcard/route/* -> 200 OK | 403 Forbidden
 {Update a resource} PATCH /yet/another/route ?url=parameters&go=here | PUT /a/route -> 200 OK json
 # comment
-{Use everything!!!} POST /route/one ?auth=TOKEN&page=1 json[param1[string], param2[int], param3[json[param4[string], param5[int]]]] | PUT /route/two ?auth=TOKEN&method=post json -> 201 Created json ^ 201 OK json | 403 Forbidden "No token/bad token provided" | 500 Internal+Server+Error json[error[string], error_code[int]]
+{Everything!!!} POST /route/one ?auth=TOKEN&page=1 json[param1[string], param2[int], param3[json[param4[string], param5[int]]]] | PUT /route/two ?auth=TOKEN&method=post json -> 201 Created json ^ 201 OK json | 403 Forbidden "No token/bad token provided" | 500 Internal+Server+Error json[error[string], error_code[int]]

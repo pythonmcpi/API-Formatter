@@ -29,6 +29,9 @@ is_http_code = lambda x: x.isdigit() and x[0] in ['1','2','3','4','5'] and len(x
 is_reason = lambda x: x.count('"') == 2 and x.startswith('"') and x.endswith('"')
 is_reason_start = lambda x: x.count('"') == 1 and x.startswith('"')
 is_reason_complete = lambda x: x.count('"') == 2 and x.endswith('"')
+is_name = lambda x: x.startswith("{") and x.endswith("}")
+is_name_start = lambda x: x.startswith("{")
+is_name_complete = lambda x: x.endswith("}") # This means you can embed {} inside the name, except right before a space.
 
 try:
     while True:
@@ -56,6 +59,7 @@ try:
         json = False
         prev_is_http_code = False
         reason = False
+        name = False
         for raw_chunk in raw_chunks:
             if json:
                 heap += raw_chunk
@@ -67,10 +71,17 @@ try:
             elif reason:
                 heap += raw_chunk
                 if is_reason_complete(heap):
-                    chunks.append(heap)
+                    chunks.append(heap.replace("+", " "))
                     heap = ""
                     reason = False
                     structure.append("REASON_L")
+            elif name:
+                heap += raw_chunk
+                if is_name_complete(heap):
+                    chunks.append(heap)
+                    heap = ""
+                    name = False
+                    structure.append("NAME_L")
             elif prev_is_http_code:
                 chunks.append(raw_chunk)
                 structure.append("HTTP_TEXT")
@@ -109,15 +120,25 @@ try:
             elif is_reason_start(raw_chunk):
                 heap += raw_chunk
                 reason = True
+            elif is_name(raw_chunk):
+                chunks.append(raw_chunk)
+                structure.append("NAME")
+            elif is_name_start(raw_chunk):
+                heap += raw_chunk
+                name = True
             else:
                 chunks.append(raw_chunk)
                 structure.append("UNKNOWN")
         if verbose:
             print(" ".join(structure), file=sys.stderr)
+        indent = 0
+        for index in range(len(structure)):
+            if structure[index] == "UNKNOWN":
+                raise SyntaxError("Bad syntax")
         print(" ".join(chunks))
 except EOFError:
     sys.exit()
 except KeyboardInterrupt:
     print("Interrupted", file=sys.stderr)
 except Exception as e:
-    print("Unexpected error:", e, file=sys.stderr)
+    print("Unexpected error %s:" % type(e).__name__, e, file=sys.stderr)
