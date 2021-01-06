@@ -38,6 +38,7 @@ json[ # Required
 
 ### Converted Markdown Format
 > Names based on custom format
+
 **METHOD /route?name=parameters&opt=ional** 
 **METHOD /route2?name=parameter**
 	**Url Paramters**
@@ -56,7 +57,7 @@ json[ # Required
 ...
 #### Converted Markdown Format Json
 > Indentation will be prepended to each line
-- * (JSON)
+- \* (JSON)
 	- "KEY"
 		- TYPE
 		- VALUE (Could be nested json)
